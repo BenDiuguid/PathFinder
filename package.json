@@ -46,9 +46,6 @@
     "gulp-angular-templatecache": "^1.7.0",
     "gulp-autoprefixer": "3.0.0",
     "gulp-babel": "^6.1.2",
-    "gulp-typescript": "~2.12.1",
-    "gulp-tsd": "~0.1.0",
-    "gulp-tslint": "^4.3.0",
     "gulp-cache": "^0.4.2",
     "gulp-concat": "^2.6.0",
     "gulp-env": "^0.4.0",
@@ -107,11 +104,11 @@
     "mocha": "^2.2.5",
     "karma-mocha": "^0.2.0",
     "karma-chai-plugins": "~0.7.0",
+    "karma-babel-preprocessor": "^6.0.1",
     "requirejs": "~2.1.11",
     "phantomjs-prebuilt": "^2.1.4",
     "proxyquire": "^1.0.1",
-    "supertest": "^1.1.0",
-    "tslint": "^3.5.0"
+    "supertest": "^1.1.0"
   },
   "engines": {
     "node": "^4.4.0",

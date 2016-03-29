@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('pathFinderApp.admin')
-  .config(function($stateProvider) {
-    $stateProvider
-      .state('admin', {
-        url: '/admin',
+  .config(function($routeProvider) {
+    $routeProvider
+      .when('/admin', {
         templateUrl: 'app/admin/admin.html',
         controller: 'AdminController',
         controllerAs: 'admin',

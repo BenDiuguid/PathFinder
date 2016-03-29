@@ -7,14 +7,16 @@ angular.module('pathFinderApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
+  'ngRoute',
   'btford.socket-io',
-  'ui.router',
   'ui.bootstrap',
   'validation.match'
 ])
-  .config(function($urlRouterProvider, $locationProvider) {
-    $urlRouterProvider
-      .otherwise('/');
+  .config(function($routeProvider, $locationProvider) {
+    $routeProvider
+      .otherwise({
+        redirectTo: '/'
+      });
 
     $locationProvider.html5Mode(true);
   });

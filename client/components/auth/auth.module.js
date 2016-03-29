@@ -4,7 +4,7 @@ angular.module('pathFinderApp.auth', [
   'pathFinderApp.constants',
   'pathFinderApp.util',
   'ngCookies',
-  'ui.router'
+  'ngRoute'
 ])
   .config(function($httpProvider) {
     $httpProvider.interceptors.push('authInterceptor');

@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('pathFinderApp')
-  .config(function($stateProvider) {
-    $stateProvider
-      .state('main', {
-        url: '/',
+  .config(function($routeProvider) {
+    $routeProvider
+      .when('/', {
         template: '<main></main>'
       });
   });

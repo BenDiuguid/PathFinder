@@ -3,9 +3,9 @@
 (function() {
 
 angular.module('pathFinderApp.auth')
-  .run(function($rootScope, $state, Auth) {
+  .run(function($rootScope, $location, Auth) {
     // Redirect to login if route requires auth and the user is not logged in, or doesn't have required role
-    $rootScope.$on('$stateChangeStart', function(event, next) {
+    $rootScope.$on('$routeChangeStart', function(event, next) {
       if (!next.authenticate) {
         return;
       }
@@ -18,7 +18,7 @@ angular.module('pathFinderApp.auth')
 
           event.preventDefault();
           return Auth.isLoggedIn(_.noop).then(is => {
-            $state.go(is ? 'main' : 'login');
+            $location.path(is ? '/' : '/login');
           });
         });
       } else {
@@ -28,7 +28,7 @@ angular.module('pathFinderApp.auth')
           }
 
           event.preventDefault();
-          $state.go('main');
+          $location.path('/');
         });
       }
     });
