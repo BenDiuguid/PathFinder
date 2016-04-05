@@ -4,38 +4,49 @@
  */
 
 'use strict';
-import Thing from '../api/thing/thing.model';
+import Path from '../api/path/path.model';
+import Beacon from '../api/beacon/beacon.model';
 import User from '../api/user/user.model';
 
-Thing.find({}).remove()
+var beacon1, beacon2;
+
+Beacon.find({}).remove()
   .then(() => {
-    Thing.create({
-      name: 'Development Tools',
-      info: 'Integration with popular tools such as Bower, Grunt, Babel, Karma, ' +
-             'Mocha, JSHint, Node Inspector, Livereload, Protractor, Jade, ' +
-             'Stylus, Sass, and Less.'
-    }, {
-      name: 'Server and Client integration',
-      info: 'Built with a powerful and fun stack: MongoDB, Express, ' +
-             'AngularJS, and Node.'
-    }, {
-      name: 'Smart Build System',
-      info: 'Build system ignores `spec` files, allowing you to keep ' +
-             'tests alongside code. Automatic injection of scripts and ' +
-             'styles into your index.html'
-    }, {
-      name: 'Modular Structure',
-      info: 'Best practice client and server structures allow for more ' +
-             'code reusability and maximum scalability'
-    }, {
-      name: 'Optimized Build',
-      info: 'Build process packs up your templates as a single JavaScript ' +
-             'payload, minifies your scripts/css/images, and rewrites asset ' +
-             'names for caching.'
-    }, {
-      name: 'Deployment Ready',
-      info: 'Easily deploy your app to Heroku or Openshift with the heroku ' +
-             'and openshift subgenerators'
+    Beacon.create({
+      macAddress: "123",
+      distance: 100,
+      angle: 0,
+      neighbors: []
+    })
+    .then((beacon) => {
+      beacon1 = beacon;
+      Beacon.create({
+        macAddress: "456",
+        distance: 100,
+        angle: 180,
+        neighbors: []
+      })
+      .then((beacon) => {
+        beacon2 = beacon;
+        beacon1.neighbors.push(beacon2._id);
+        beacon2.neighbors.push(beacon1._id);
+        
+        return Promise.all([beacon1.save(), beacon2.save()])
+      })
+      .then(() => {
+
+        return Path.find({}).remove()
+          .then(() => {
+            Path.create({
+              name: 'WINNER',
+              beaconIds: [beacon1._id, beacon2._id]
+            })
+            .then(() => {
+              console.log('finished populating beacons and paths');
+            });
+          });
+
+      });
     });
   });
 
