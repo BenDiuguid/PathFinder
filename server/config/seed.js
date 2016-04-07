@@ -13,6 +13,7 @@ var beacon1, beacon2;
 Beacon.find({}).remove()
   .then(() => {
     return Beacon.create({
+      nickname: "Darth Vader",
       macAddress: "123",
       angles: [],
       distances: [],
@@ -22,6 +23,7 @@ Beacon.find({}).remove()
   .then((beacon) => {
     beacon1 = beacon;
     return Beacon.create({
+      nickname: "Kylo Ren",
       macAddress: "456",
       angles: [],
       distances: [],
@@ -47,7 +49,8 @@ Beacon.find({}).remove()
   .then(() => {
     return Path.create({
       name: 'WINNER',
-      beaconIds: [beacon1._id, beacon2._id]
+      beaconIds: [beacon1._id, beacon2._id],
+      angles: [77]
     });
   })
   .then(() => {

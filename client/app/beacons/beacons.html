@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12" ng-repeat="beacon in $ctrl.beacons">
+      <p>beacon._id: {{beacon._id}}</p>
+      <p>beacon.macAddress: {{beacon.macAddress}}</p>
+      <ul>
+        <li ng-repeat="neighbor in beacon.neighbors">
+          <p>neighbor._id: {{neighbor}}</p>
+          <p>distance: {{beacon.distances[$index]}}</p>
+          <p>angle: {{beacon.angles[$index]}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
