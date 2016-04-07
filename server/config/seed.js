@@ -12,48 +12,47 @@ var beacon1, beacon2;
 
 Beacon.find({}).remove()
   .then(() => {
-    Beacon.create({
+    return Beacon.create({
       macAddress: "123",
       angles: [],
       distances: [],
       neighbors: []
-    })
-    .then((beacon) => {
-      beacon1 = beacon;
-      Beacon.create({
-        macAddress: "456",
-        angles: [],
-        distances: [],
-        neighbors: []
-      })
-      .then((beacon) => {
-        beacon2 = beacon;
-        beacon1.neighbors.push(beacon2._id);
-        beacon1.distances.push(100);
-        beacon1.angles.push(0);
-
-        beacon2.neighbors.push(beacon1._id);
-        beacon2.distances.push(100);
-        beacon2.angles.push(180);
-
-        return Promise.all([beacon1.save(), beacon2.save()])
-      })
-      .then(() => {
-
-        return Path.find({}).remove()
-          .then(() => {
-            Path.create({
-              name: 'WINNER',
-              beaconIds: [beacon1._id, beacon2._id]
-            })
-            .then(() => {
-              console.log('finished populating beacons and paths');
-            });
-          });
-
-      });
     });
+  })
+  .then((beacon) => {
+    beacon1 = beacon;
+    return Beacon.create({
+      macAddress: "456",
+      angles: [],
+      distances: [],
+      neighbors: []
+    });
+  })
+  .then((beacon) => {
+    beacon2 = beacon;
+    beacon1.neighbors.push(beacon2._id);
+    beacon1.distances.push(100);
+    beacon1.angles.push(0);
+
+    beacon2.neighbors.push(beacon1._id);
+    beacon2.distances.push(100);
+    beacon2.angles.push(180);
+
+    return Promise.all([beacon1.save(), beacon2.save()]);
+  })
+  .then(() => {
+    return Path.find({}).remove();
+  })
+  .then(() => {
+    return Path.create({
+      name: 'WINNER',
+      beaconIds: [beacon1._id, beacon2._id]
+    });
+  })
+  .then(() => {
+    console.log('finished populating beacons and paths');
   });
+
 
 User.find({}).remove()
   .then(() => {
