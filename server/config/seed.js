@@ -14,23 +14,28 @@ Beacon.find({}).remove()
   .then(() => {
     Beacon.create({
       macAddress: "123",
-      distance: 100,
-      angle: 0,
+      angles: [],
+      distances: [],
       neighbors: []
     })
     .then((beacon) => {
       beacon1 = beacon;
       Beacon.create({
         macAddress: "456",
-        distance: 100,
-        angle: 180,
+        angles: [],
+        distances: [],
         neighbors: []
       })
       .then((beacon) => {
         beacon2 = beacon;
         beacon1.neighbors.push(beacon2._id);
+        beacon1.distances.push(100);
+        beacon1.angles.push(0);
+
         beacon2.neighbors.push(beacon1._id);
-        
+        beacon2.distances.push(100);
+        beacon2.angles.push(180);
+
         return Promise.all([beacon1.save(), beacon2.save()])
       })
       .then(() => {
