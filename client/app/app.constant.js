@@ -1,13 +1,9 @@
 (function(angular, undefined) {
-  angular.module("pathFinderApp.constants", [])
+'use strict';
 
-.constant("appConfig", {
-	"userRoles": [
-		"guest",
-		"user",
-		"admin"
-	]
-})
+angular.module('path-finderApp.constants', [])
+
+.constant('appConfig', {userRoles:['guest','user','admin']})
 
 ;
 })(angular);
