@@ -30,6 +30,7 @@ Beacon.find({}).remove()
   })
   .then((beacon) => {
     beacon2 = beacon;
+
     beacon1.neighbors.push(beacon2._id);
     beacon1.distances.push(100);
     beacon1.angles.push(0);

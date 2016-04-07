@@ -68,9 +68,7 @@ export function index(req, res) {
 
 // Gets a single Beacon from the DB
 export function show(req, res) {
-  return Beacon.findById(req.params.id)
-    .populate()
-    .exec()
+  return Beacon.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
