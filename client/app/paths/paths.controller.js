@@ -5,7 +5,7 @@ class PathsComponent {
   constructor($http) {
     this.$http = $http;
     this.pathForm = {
-      name: "",
+      name: '',
       beaconIds: [],
       angles: [],
 

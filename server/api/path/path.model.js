@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 
 var PathSchema = new mongoose.Schema({
   name: String,
-  beaconIds: [String],
+  macAddresses: [String],
   angles: [Number]
 });
 
