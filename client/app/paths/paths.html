@@ -1,29 +1,30 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12" ng-repeat="path in $ctrl.paths">
-      <p>path._id: {{path._id}}</p>
-      <p>path.name: {{path.name}}</p>
-      <ul>
-        <li ng-repeat="beaconId in path.beaconIds">beaconId: {{beaconId}}</li>
-      </ul>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
-      <ul>
-        <li ng-repeat="beacon in $ctrl.pathForm.beaconIds">
-          <p>Beacon ID: {{beacon}}</p>
-          <p>Angle: {{ $ctrl.pathForm.angles[$index] }}</p>
+      <h4>Path: <strong>{{path.name}}</strong> <button class="btn btn-warning" ng-click="$ctrl.selectPath($index)">Edit</button></h4>
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="beacon in path.beacons">
+          <p>Beacon: {{beacon}}</p>
+          <p>Angle: {{ path.angles[$index] }}</p>
         </li>
       </ul>
     </div>
   </div>
+  <hr>
   <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
-      <form ng-submit="$ctrl.submitPath()">
+      <h2>Add/Edit New Path:</h2>
+      <form ng-submit="$ctrl.saveAll()">
         <div class="form-group">
           <label for="PathName">Name</label>
-          <input type="text" name="PathName" class="form-control" placeholder="Name" ng-model="$ctrl.pathForm.name">
+          <input type="text" name="PathName" class="form-control" placeholder="Name" ng-model="$ctrl.selectedPath.name">
+        </div>
+
+        <div class="form-group" ng-repeat="beacon in $ctrl.selectedPath.beacons track by $index">
+          <p>Nickname: {{beacon.nickname}}</p>
+          <label for="">Angle</label>
+          <input type="number" name="" ng-model="$ctrl.selectedPath.angles[$index]" />
+          <button type="button" class="btn btn-danger" ng-click="$ctrl.removeBeaconFromSelectedPath($index)">X</button>
         </div>
 
         <div class="form-group">
@@ -31,18 +32,18 @@
           <select
             name="beacon-select"
             ng-options="item as item.nickname for item in $ctrl.availableBeacons track by item._id"
-            ng-model="$ctrl.pathForm.selectedBeacon">
+            ng-model="$ctrl.selectedBeacon">
           </select>
         </div>
         <div class="form-group">
           <label for="angle-select">Angle</label>
-          <input type="number" name="angle-select" placeholder="Angle" ng-model="$ctrl.pathForm.selectedAngle" />
+          <input type="number" name="angle-select" placeholder="Angle" ng-model="$ctrl.selectedAngle" />
         </div>
         <div class="form-group">
           <button type="button" class="btn btn-default" ng-click="$ctrl.plusBeacon()"> + </button>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Save All</button>
       </form>
     </div>
   </div>

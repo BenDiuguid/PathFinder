@@ -24,6 +24,8 @@ function respondWithResult(res, statusCode) {
 function saveUpdates(updates) {
   return function(entity) {
     var updated = _.merge(entity, updates);
+    updated.markModified('angles');
+    updated.markModified('beacons');
     return updated.save()
       .then(updated => {
         return updated;
@@ -61,14 +63,18 @@ function handleError(res, statusCode) {
 
 // Gets a list of Paths
 export function index(req, res) {
-  return Path.find().exec()
+  return Path.find()
+    .populate('beacons')
+    .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
 // Gets a single Path from the DB
 export function show(req, res) {
-  return Path.findById(req.params.id).exec()
+  return Path.findById(req.params.id)
+    .populate('beacons')
+    .exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));

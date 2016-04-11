@@ -4,59 +4,90 @@
 class PathsComponent {
   constructor($http) {
     this.$http = $http;
-    this.pathForm = {
-      name: '',
-      beaconIds: [],
-      angles: [],
 
-      selectedAngle: 0,
-      selectedBeacon: null
-    };
+    this.selectedAngle = 0;
+    this.selectedBeacon = null;
+    this.selectedPath = {
+      beacons: [],
+      angles: [],
+      name: ''
+    }
   }
 
-  removeSelectedBeacon(beacon) {
+  removeBeaconFromAvailable(beacon) {
     this.availableBeacons = this.availableBeacons.filter( (availableBeacon) => {
       return (availableBeacon._id !== beacon._id);
     });
   }
 
-  addToNewPath(beacon, angle) {
-    this.pathForm.beaconIds.push(beacon._id);
-    this.pathForm.angles.push(angle);
+  addToSelectedPath(beacon, angle) {
+    this.selectedPath.beacons.push(beacon);
+    this.selectedPath.angles.push(angle);
   }
 
-  resetSelects() {
-    this.pathForm.selectedAngle = 0;
-    this.pathForm.selectedBeacon = {};
+  resetSelectedPath() {
+    this.selectedPath = {
+      beacons: [],
+      angles: [],
+      name: ''
+    }
+    this.availableBeacons = this.allBeacons;
+  }
+
+  resetSelectedBeaconAndAngle() {
+    this.selectedAngle = 0;
+    this.selectedBeacon = null;
   }
 
   plusBeacon() {
-    const { selectedBeacon, selectedAngle } = this.pathForm;
-    this.addToNewPath(selectedBeacon, selectedAngle);
-    this.resetSelects();
-    this.removeSelectedBeacon(selectedBeacon);
+    const beacon = this.selectedBeacon;
+    const angle = this.selectedAngle;
+
+    if(!beacon || !angle) return;
+
+    this.addToSelectedPath(beacon, angle);
+    this.resetSelectedBeaconAndAngle();
+    this.removeBeaconFromAvailable(beacon);
   }
 
-  submitPath() {
-    const payload = {
-      name: this.pathForm.name,
-      beaconIds: this.pathForm.beaconIds,
-      angles: this.pathForm.angles
-    };
-    this.$http.post('/api/paths', payload).then(response => {
-      console.log(response);
-    });
+  saveAll() {
+    if(!this.selectedPath) return;
+
+    if(this.selectedPath._id) {
+      this.$http.put('/api/paths/'+this.selectedPath._id, this.selectedPath).then(response => {
+        this.resetSelectedBeaconAndAngle();
+        this.resetSelectedPath();
+      });
+    } else {
+      this.$http.post('/api/paths/', this.selectedPath).then(response => {
+        this.paths.push(this.selectedPath);
+        this.resetSelectedBeaconAndAngle();
+        this.resetSelectedPath();
+      });
+    }
+  }
+
+  selectPath(pathIndex) {
+    this.availableBeacons = this.allBeacons;
+    this.selectedPath = this.paths[pathIndex];
+
+    this.selectedPath.beacons.map( this.removeBeaconFromAvailable.bind(this) );
+  }
+
+  removeBeaconFromSelectedPath(beaconIndex) {
+    const selectedBeaconId = this.selectedPath.beacons[beaconIndex]._id;
+    this.selectedPath.beacons = this.selectedPath.beacons.filter( beacon => beacon._id !== selectedBeaconId );
   }
 
   $onInit() {
     this.$http.get('/api/paths').then(response => {
       this.paths = response.data;
-    }).then(()=> {
-      this.$http.get('/api/beacons').then(response => {
-        this.beacons = response.data;
-        this.availableBeacons = this.beacons;
-      });
-    });
+    }).then(() => {
+      return this.$http.get('/api/beacons');
+    }).then(response => {
+      this.allBeacons = response.data;
+      this.availableBeacons = this.allBeacons;
+    }).catch( err => console.error(err) );
   }
 }
 
