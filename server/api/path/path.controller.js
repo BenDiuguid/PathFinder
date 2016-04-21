@@ -23,9 +23,13 @@ function respondWithResult(res, statusCode) {
 
 function saveUpdates(updates) {
   return function(entity) {
+    console.log(updates);
     var updated = _.merge(entity, updates);
+    updated.beacons = updates.beacons;
+    updated.angles = updates.angles;
     updated.markModified('angles');
     updated.markModified('beacons');
+    console.log(updated);
     return updated.save()
       .then(updated => {
         return updated;

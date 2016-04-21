@@ -75,8 +75,10 @@ class PathsComponent {
   }
 
   removeBeaconFromSelectedPath(beaconIndex) {
-    const selectedBeaconId = this.selectedPath.beacons[beaconIndex]._id;
-    this.selectedPath.beacons = this.selectedPath.beacons.filter( beacon => beacon._id !== selectedBeaconId );
+    this.selectedPath.beacons.splice(beaconIndex, 1);
+    this.selectedPath.angles.splice(beaconIndex, 1);
+    // const selectedBeaconId = this.selectedPath.beacons[beaconIndex]._id;
+    // this.selectedPath.beacons = this.selectedPath.beacons.filter( beacon => beacon._id !== selectedBeaconId );
   }
 
   $onInit() {
